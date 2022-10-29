@@ -6,12 +6,12 @@ type Task = {
     isFav: boolean
 };
 
+const API_URL: string = 'http://localhost:3000/tasks';
+
 export const useTaskStore = defineStore('taskStore', {
-    state: (): { tasks: Task[] } => ({
-        tasks: [
-            { id: 1, title: 'buy some milk', isFav: false },
-            { id: 2, title: 'play Gloomhaven', isFav: true }
-        ]
+    state: (): { tasks: Task[], isLoading: boolean } => ({
+        tasks: [],
+        isLoading: false
     }),
     getters: {
         getFavoritesTasks(): Task[] {
@@ -25,15 +25,43 @@ export const useTaskStore = defineStore('taskStore', {
         }
     },
     actions: {
-        addTask(task: Task) {
+        async loadTasks() {
+            this.isLoading = true;
+            const response = await fetch(API_URL);
+            const data: Task[] = await response.json();
+            this.tasks = data;
+            this.isLoading = false;
+        },
+        async addTask(task: Task) {
             this.tasks.push(task);
+
+            const response: Response = await fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify(task),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) { console.error('error happened'); }
         },
-        deleteTask(id: number) {
+        async deleteTask(id: number) {
             this.tasks = this.tasks.filter(task => task.id !== id);
+            const response: Response = await fetch(`${API_URL}/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) { console.error('error happened'); }
         },
-        updateFavoriteTask(id: number) {
+        async updateFavoriteTask(id: number) {
             const task = this.tasks.find(task => task.id === id);
             if (task) { task.isFav = !task.isFav; }
+
+            const response: Response = await fetch(`${API_URL}/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ isFav: task?.isFav }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (!response.ok) { console.error('error happened'); }
         }
     }
 });

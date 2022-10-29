@@ -14,13 +14,17 @@
       <button @click="handleUpdateFilter('favs')">Favs tasks</button>
     </nav>
 
-    <div class='task-list' v-if="filter === 'all'">
+    <div class="loading" v-if="taskStore.isLoading">
+      Loading tasks...
+    </div>
+
+    <div class='task-list' v-if="filter === 'all' && !taskStore.isLoading">
       <p>You have {{ taskStore.getTotalCount }} tasks left to do.</p>
       <div v-for='task in taskStore.tasks' key="task.id">
         <TaskDetails :task='task' />
       </div>
     </div>
-    <div class="task-list" v-if="filter === 'favs'">
+    <div class="task-list" v-if="filter === 'favs' && !taskStore.isLoading">
       <p>You have {{ taskStore.getFavoritesTasksCount }} favs tasks to do.</p>
       <div v-for='task in taskStore.getFavoritesTasks' key="task.id">
         <TaskDetails :task='task' />
@@ -36,6 +40,7 @@ import TaskForm from './components/TaskForm.vue';
 import { useTaskStore } from './stores/TaskStore';
 
 const taskStore = useTaskStore();
+taskStore.loadTasks();
 
 const filter = ref<'all' | 'favs'>('all');
 
