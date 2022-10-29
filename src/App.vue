@@ -5,6 +5,10 @@
       <h1>Pinia Tasks</h1>
     </header>
 
+    <div class="new-task-form">
+      <TaskForm />
+    </div>
+
     <nav class="filter">
       <button @click="handleUpdateFilter('all')">All tasks</button>
       <button @click="handleUpdateFilter('favs')">Favs tasks</button>
@@ -26,15 +30,16 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import TaskDetails from './components/TaskDetails.vue';
-  import { useTaskStore } from './stores/TaskStore';
+import { ref } from 'vue';
+import TaskDetails from './components/TaskDetails.vue';
+import TaskForm from './components/TaskForm.vue';
+import { useTaskStore } from './stores/TaskStore';
 
-  const taskStore = useTaskStore();
+const taskStore = useTaskStore();
 
-  const filter = ref<'all' | 'favs'>('all');
+const filter = ref<'all' | 'favs'>('all');
 
-  const handleUpdateFilter = (newFilter: 'all' | 'favs') => {
-    filter.value = newFilter;
-  }
+const handleUpdateFilter = (newFilter: 'all' | 'favs') => {
+  filter.value = newFilter;
+}
 </script>

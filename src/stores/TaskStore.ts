@@ -23,6 +23,18 @@ export const useTaskStore = defineStore('taskStore', {
         getTotalCount(): number {
             return this.tasks.length;
         }
+    },
+    actions: {
+        addTask(task: Task) {
+            this.tasks.push(task);
+        },
+        deleteTask(id: number) {
+            this.tasks = this.tasks.filter(task => task.id !== id);
+        },
+        updateFavoriteTask(id: number) {
+            const task = this.tasks.find(task => task.id === id);
+            if (task) { task.isFav = !task.isFav; }
+        }
     }
 });
 
