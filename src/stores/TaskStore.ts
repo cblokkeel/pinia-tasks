@@ -4,7 +4,7 @@ type Task = {
     id: number,
     title: string,
     isFav: boolean
-}
+};
 
 export const useTaskStore = defineStore('taskStore', {
     state: (): { tasks: Task[] } => ({
@@ -14,3 +14,5 @@ export const useTaskStore = defineStore('taskStore', {
         ]
     })
 });
+
+export type { Task };
