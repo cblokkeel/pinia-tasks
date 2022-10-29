@@ -12,7 +12,18 @@ export const useTaskStore = defineStore('taskStore', {
             { id: 1, title: 'buy some milk', isFav: false },
             { id: 2, title: 'play Gloomhaven', isFav: true }
         ]
-    })
+    }),
+    getters: {
+        getFavoritesTasks(): Task[] {
+            return this.tasks.filter(task => task.isFav);
+        },
+        getFavoritesTasksCount(): number {
+            return this.tasks.reduce((acc: number, task: Task) => task.isFav ? acc + 1 : acc, 0);
+        },
+        getTotalCount(): number {
+            return this.tasks.length;
+        }
+    }
 });
 
 export type { Task };
