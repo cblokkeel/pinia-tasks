@@ -1,6 +1,9 @@
 <template>
   <main>
-    <h1>Hello world</h1>
+    <header>
+      <img src="./assets/pinia-logo.svg" alt="pinia logo">
+      <h1>Pinia Tasks</h1>
+    </header>
   </main>
 </template>
 
